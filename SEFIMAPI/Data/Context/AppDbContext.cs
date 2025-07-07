@@ -30,7 +30,7 @@
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=sefim2;User ID=sa;Password=123456a.A;Trust Server Certificate=True");
+                optionsBuilder.UseSqlServer("Data Source=sefim2.database.windows.net;Initial Catalog=sefim;Persist Security Info=True;User ID=yasinakmaz;Password=123456a.A;Trust Server Certificate=True");
             }
         }
     }
