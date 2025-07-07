@@ -1,0 +1,15 @@
+﻿global using SEFIMAPI.Data.Context;
+global using SEFIMAPI.Data.Models;
+global using SEFIMAPI.Data.Repository;
+global using Microsoft.Data.SqlClient;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations;
+global using System.Collections.ObjectModel;
+global using SEFIMAPI.Data.Querys.Products;
+global using System.Text.Json.Serialization;
+global using Microsoft.AspNetCore.Routing.Constraints;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using SEFIMAPI.Data.Querys.DirectTransactions;
+global using SEFIMAPI.Data.Querys.Users;
+global using System.ComponentModel.DataAnnotations.Schema;
