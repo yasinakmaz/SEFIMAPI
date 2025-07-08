@@ -1,13 +1,13 @@
-// Process'in en baþýnda, herhangi bir Aspire kodu çalýþmadan önce
-// environment variable'larý set edelim
-Console.WriteLine("Aspire Environment Initialization baþlatýlýyor...");
+ï»¿// Process'in en baÃ¾Ã½nda, herhangi bir Aspire kodu Ã§alÃ½Ã¾madan Ã¶nce
+// environment variable'larÃ½ set edelim
+Console.WriteLine("Aspire Environment Initialization baÃ¾latÃ½lÃ½yor...");
 
-// Environment detection - bu çok erken yapýlmalý
+// Environment detection - bu Ã§ok erken yapÃ½lmalÃ½
 var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
 if (!isDevelopment)
 {
-    // Environment variable'larý process baþlangýcýnda set et
+    // Environment variable'larÃ½ process baÃ¾langÃ½cÃ½nda set et
     Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Production");
     Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://localhost:18888");
     Environment.SetEnvironmentVariable("ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL", "http://localhost:19999");
@@ -18,11 +18,11 @@ if (!isDevelopment)
     Console.WriteLine("Dashboard minimal configuration applied");
 }
 
-// Þimdi Aspire builder'ý initialize edebiliriz
-// Bu noktada environment variable'lar hazýr
+// Ãžimdi Aspire builder'Ã½ initialize edebiliriz
+// Bu noktada environment variable'lar hazÃ½r
 var builder = DistributedApplication.CreateBuilder(args);
 
-// API servisinizi normal þekilde tanýmlayýn
+// API servisinizi normal Ã¾ekilde tanÃ½mlayÃ½n
 var apiService = builder.AddProject<Projects.SEFIMAPI>("sefimapi")
     .WithHttpEndpoint(port: 5001, name: "api");
 
@@ -33,11 +33,11 @@ var app = builder.Build();
 // Status information
 if (!isDevelopment)
 {
-    Console.WriteLine("=== Production Mode Baþarýyla Baþlatýldý ===");
+    Console.WriteLine("=== Production Mode BaÃ¾arÃ½yla BaÃ¾latÃ½ldÃ½ ===");
     Console.WriteLine("Primary API Service: https://localhost:5001");
     Console.WriteLine("Dashboard (background): https://localhost:18888");
-    Console.WriteLine("MAUI uygulamanýz API endpoint'ine baðlanabilir");
-    Console.WriteLine("Sistem hazýr - kapatmak için Ctrl+C");
+    Console.WriteLine("MAUI uygulamanÃ½z API endpoint'ine baÃ°lanabilir");
+    Console.WriteLine("Sistem hazÃ½r - kapatmak iÃ§in Ctrl+C");
     Console.WriteLine("==========================================");
 }
 
