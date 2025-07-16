@@ -13,116 +13,134 @@
             _logger = logger;
         }
 
-        [HttpGet("{pagesize},{pagenumber}")]
-        public async Task<ActionResult<List<DirectTransaction>>> GetDirectTransaction(int pagesize, int pagenumber)
+        // Aktif işlemleri listeleme
+        [HttpGet("active")]
+        public async Task<ActionResult<List<DirectTransaction>>> GetDirectTransaction([FromQuery] int pagesize, [FromQuery] int pagenumber)
         {
             try
             {
                 var products = await _directTransactionRepository.GetDirectTransactions(pagesize, pagenumber);
                 return Ok(products);
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
-                return StatusCode(500, "DbUpdate Hatası");
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
             }
-            catch (SqlException ex)
+        }
+
+        // Silinmiş işlemleri listeleme
+        [HttpGet("deleted")]
+        public async Task<ActionResult<List<DirectTransaction>>> GetDeletedDirectTransactions([FromQuery] int pagesize, [FromQuery] int pagenumber)
+        {
+            try
             {
-                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
-                return StatusCode(500, "Sql Hatası");
+                var products = await _directTransactionRepository.GetDeletedDirectTransactions(pagesize, pagenumber);
+                return Ok(products);
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Genel Hata : {ex.Message}");
-                return StatusCode(500, "Genel Hatası");
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
             }
         }
-        [HttpPost]
-        [Route("add")]
+
+        // Yeni işlem ekleme
+        [HttpPost("add")]
         public async Task<IActionResult> AddTransaction([FromBody] DirectTransaction transaction)
         {
             if (transaction == null)
-            {
                 return BadRequest("Transaction verisi boş olamaz.");
-            }
 
             try
             {
                 var result = await _directTransactionRepository.AddDirectTransaction(transaction);
-
-                if (result != null)
-                {
-                    return Ok("İşlem Başarılı");
-                }
-                else
-                    return StatusCode(500, "Kayıt yapılamadı.");
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
-                return StatusCode(500, "DbUpdate Hatası");
-            }
-            catch (SqlException ex)
-            {
-                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
-                return StatusCode(500, "Sql Hatası");
+                return result != null ? Ok("İşlem Başarılı") : StatusCode(500, "Kayıt yapılamadı.");
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Genel Hata : {ex.Message}");
-                return StatusCode(500, "Genel Hatası");
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
             }
         }
-        [HttpDelete("{id}")]
+
+        // Aktif işlem silme
+        [HttpDelete("active/{id}")]
         public async Task<IActionResult> DeleteTransaction(int id)
         {
             try
             {
                 var result = await _directTransactionRepository.DeleteDirectTransaction(id);
-                if (result)
-                    return Ok("İşlem Başarılı");
-                else
-                    return BadRequest("Silme işlemi başarısız oldu - Kayıt bulunamadı.");
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
-                return StatusCode(500, $"DbUpdate Hatası: {ex.InnerException?.Message ?? ex.Message}");
-            }
-            catch (SqlException ex)
-            {
-                _logger?.LogCritical($"Controller Sql Hatası : {ex.Message}");
-                return BadRequest($"Sql Hatası: {ex.Message}");
+                return result ? Ok("İşlem Başarılı") : BadRequest("Kayıt bulunamadı.");
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Controller Genel Hata : {ex.Message}");
-                return StatusCode(500, $"Genel Hata: {ex.Message}");
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
             }
         }
 
-        [HttpPost]
+        // Silinmiş işlem silme
+        [HttpDelete("deleted/{id}")]
+        public async Task<IActionResult> DeleteDeletedTransaction(int id)
+        {
+            try
+            {
+                var result = await _directTransactionRepository.DeleteDeletedDirectTransaction(id);
+                return result ? Ok("İşlem Başarılı") : BadRequest("Kayıt bulunamadı.");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+        }
+
+        // Sayfa sayısı hesaplama (aktif işlemler)
+        [HttpGet("active/pagecount")]
+        public async Task<IActionResult> GetDirectTransactionPageNumber([FromQuery] int pagesize)
+        {
+            try
+            {
+                int result = await _directTransactionRepository.GetDirectTransactionPageNumber(pagesize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+        }
+
+        // Sayfa sayısı hesaplama (silinmiş işlemler)
+        [HttpGet("deleted/pagecount")]
+        public async Task<IActionResult> GetDeletedDirectTransactionPageNumber([FromQuery] int pagesize)
+        {
+            try
+            {
+                int result = await _directTransactionRepository.GetDeletedDirectTransactionPageNumber(pagesize);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+        }
+
+        // Silinmiş işlemler tablosu oluşturma
+        [HttpPost("deleted/init")]
         public async Task<IActionResult> DeletedTableCreate()
         {
             try
             {
-               var result = await _directTransactionRepository.DeletedTransactionTableCreate();
+                await _directTransactionRepository.DeletedTransactionTableCreate();
                 return Ok("İşlem Tamamlandı");
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
-                return StatusCode(500, "DbUpdate Hatası");
-            }
-            catch (SqlException ex)
-            {
-                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
-                return StatusCode(500, "Sql Hatası");
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Genel Hata : {ex.Message}");
-                return StatusCode(500, "Genel Hatası");
+                _logger?.LogCritical($"Hata: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
             }
         }
     }

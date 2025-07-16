@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Obfuscator>
+	<Var name="InPath" value="./publish" />
+	<Var name="OutPath" value="./publish-obfuscated" />
+
+	<Module file="$(InPath)/SEFIMAPI.dll" />
+
+	<!-- Sadece controller'ları koru -->
+	<SkipType name="*Controller" />
+	<SkipType name="Program" />
+
+	<!-- Agresif obfuscation -->
+	<Var name="RenameProperties" value="true" />
+	<Var name="RenameFields" value="true" />
+	<Var name="RenameEvents" value="true" />
+	<Var name="RenameParameters" value="true" />
+	<Var name="KeepPublicApi" value="false" />
+	<Var name="HidePrivateApi" value="true" />
+	<Var name="UseUnicodeNames" value="true" />
+	<Var name="RegenerateDebugInfo" value="false" />
+</Obfuscator>

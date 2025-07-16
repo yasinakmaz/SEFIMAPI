@@ -9,6 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEFIMAPI.AppHost", "SEFIMAP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEFIMAPI.ServiceDefaults", "SEFIMAPI.ServiceDefaults\SEFIMAPI.ServiceDefaults.csproj", "{C46B6E6C-1B7D-7A1C-DD91-E9BB53109161}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		PublishService.ps1 = PublishService.ps1
+		ServiceInstaller.bat = ServiceInstaller.bat
+		ServiceManager.ps1 = ServiceManager.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

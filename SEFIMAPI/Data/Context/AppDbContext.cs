@@ -26,12 +26,5 @@
                 entity.Property(e => e.Price).HasPrecision(18, 2);
             });
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Data Source=sefim2.database.windows.net;Initial Catalog=sefim;Persist Security Info=True;User ID=yasinakmaz;Password=123456a.A;Trust Server Certificate=True");
-            }
-        }
     }
 }

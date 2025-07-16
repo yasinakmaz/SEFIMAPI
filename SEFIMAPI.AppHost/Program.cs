@@ -1,43 +1,51 @@
-﻿// Process'in en baþýnda, herhangi bir Aspire kodu çalýþmadan önce
-// environment variable'larý set edelim
-Console.WriteLine("Aspire Environment Initialization baþlatýlýyor...");
+﻿using Microsoft.Extensions.Configuration;
 
-// Environment detection - bu çok erken yapýlmalý
-var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+Console.WriteLine("Aspire Ortam Başlatılıyor...");
+
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+var environment = config["Environment"] ?? "Production";
+var isDevelopment = environment == "Development";
+
+var httpsPort = config.GetValue<int>("AspireSettings:HttpsPort");
+var dashboardPort = config.GetValue<int>("AspireSettings:DashboardPort");
+var otlpUrl = config["AspireSettings:DashboardOtlpUrl"];
+var otlpHttpUrl = config["AspireSettings:DashboardHttpUrl"];
+var allowUnsecured = config.GetValue<bool>("AspireSettings:AllowUnsecuredTransport");
 
 if (!isDevelopment)
 {
-    // Environment variable'larý process baþlangýcýnda set et
     Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Production");
-    Environment.SetEnvironmentVariable("ASPNETCORE_URLS", "https://localhost:18888");
-    Environment.SetEnvironmentVariable("ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL", "http://localhost:19999");
-    Environment.SetEnvironmentVariable("ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL", "http://localhost:19998");
-    Environment.SetEnvironmentVariable("ASPIRE_ALLOW_UNSECURED_TRANSPORT", "true");
+    // Burada tüm ağdan dinlemek için 0.0.0.0 kullanıyoruz
+    Environment.SetEnvironmentVariable("ASPNETCORE_URLS", $"https://0.0.0.0:{dashboardPort};https://0.0.0.0:{httpsPort}");
+    Environment.SetEnvironmentVariable("ASPNETCORE_HTTPS_PORT", httpsPort.ToString());
+    Environment.SetEnvironmentVariable("ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL", otlpUrl);
+    Environment.SetEnvironmentVariable("ASPIRE_DASHBOARD_OTLP_HTTP_ENDPOINT_URL", otlpHttpUrl);
+    Environment.SetEnvironmentVariable("ASPIRE_ALLOW_UNSECURED_TRANSPORT", allowUnsecured.ToString());
 
-    Console.WriteLine("Production environment variables configured");
-    Console.WriteLine("Dashboard minimal configuration applied");
+    Console.WriteLine("Üretim ortamı değişkenleri yapılandırmadan ayarlandı");
+    Console.WriteLine($"Dashboard URL: https://0.0.0.0:{dashboardPort}");
+    Console.WriteLine($"API URL: https://0.0.0.0:{httpsPort}");
 }
 
-// Þimdi Aspire builder'ý initialize edebiliriz
-// Bu noktada environment variable'lar hazýr
 var builder = DistributedApplication.CreateBuilder(args);
 
-// API servisinizi normal þekilde tanýmlayýn
 var apiService = builder.AddProject<Projects.SEFIMAPI>("sefimapi")
-    .WithHttpEndpoint(port: 5001, name: "api");
+    .WithHttpEndpoint(port: httpsPort, name: "api");
 
-Console.WriteLine("SEFIMAPI servisi port 5001'de configuration edildi");
+Console.WriteLine($"SEFIMAPI servisi {httpsPort} portunda yapılandırıldı");
 
 var app = builder.Build();
 
-// Status information
 if (!isDevelopment)
 {
-    Console.WriteLine("=== Production Mode Baþarýyla Baþlatýldý ===");
-    Console.WriteLine("Primary API Service: https://localhost:5001");
-    Console.WriteLine("Dashboard (background): https://localhost:18888");
-    Console.WriteLine("MAUI uygulamanýz API endpoint'ine baðlanabilir");
-    Console.WriteLine("Sistem hazýr - kapatmak için Ctrl+C");
+    Console.WriteLine("=== ÜRETİM MODU BAŞARILIYLA BAŞLATILDI ===");
+    Console.WriteLine($"Ana API Servisi: https://<sunucu-ip>:{httpsPort}");
+    Console.WriteLine($"Dashboard: https://<sunucu-ip>:{dashboardPort}");
+    Console.WriteLine("MAUI uygulamanız API endpoint'ine bağlanabilir");
+    Console.WriteLine("Sistem hazır - kapatmak için Ctrl+C");
     Console.WriteLine("==========================================");
 }
 

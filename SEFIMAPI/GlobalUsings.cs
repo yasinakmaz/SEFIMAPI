@@ -13,3 +13,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using SEFIMAPI.Data.Querys.DirectTransactions;
 global using SEFIMAPI.Data.Querys.Users;
 global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Text.Json;

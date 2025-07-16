@@ -9,18 +9,36 @@
 		<IsAspireHost>true</IsAspireHost>
 		<UserSecretsId>446ca6a7-4ca9-4b08-997a-d3b680546292</UserSecretsId>
 
-		<!-- Single-file deployment için -->
+		<!-- Windows Service ve Single-file deployment için -->
 		<PublishSingleFile>true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<PublishTrimmed>false</PublishTrimmed>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
+		<!-- Windows Service metadata -->
+		<AssemblyName>SEFIMAPIService</AssemblyName>
+		<AssemblyTitle>SEFIM API Service</AssemblyTitle>
+		<Product>SEFIM API Service</Product>
+		<Company>SEFIM</Company>
+		<Description>SEFIM API Windows Service</Description>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Aspire.Hosting.AppHost" Version="9.3.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.6" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="9.0.6" />
+		<PackageReference Include="Serilog" Version="4.3.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+		<PackageReference Include="Serilog.Sinks.EventLog" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,9 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
+		<Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="appsettings.*.json" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 </Project>
