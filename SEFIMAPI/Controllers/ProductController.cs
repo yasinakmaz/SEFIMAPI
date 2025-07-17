@@ -38,6 +38,35 @@
             }
         }
 
+        [HttpGet("productpagenumber/pagecount")]
+        public async Task<ActionResult<Product>> GetProductPageNumber(int pagesize)
+        {
+            try
+            {
+                int result = await _productRepository.GetProductPageNumber(pagesize);
+                if (result <= 0)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                return StatusCode(500, "DbUpdate Hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                return StatusCode(500, "Sql Hatası");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                return StatusCode(500, "Genel Hatası");
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {

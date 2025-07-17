@@ -11,6 +11,33 @@
             _context = context;
         }
 
+        public async Task<int> GetProductPageNumber(int pagesize)
+        {
+            try
+            {
+                int totalCount = await _context.Product.CountAsync();
+                int totalPages = (int)Math.Ceiling(totalCount / (double)pagesize);
+
+                return totalPages;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
+            }
+            return 0;
+        }
+
         public async Task<List<Product>> GetAllProductAsync()
         {
             List<Product> products = new List<Product>();
@@ -22,14 +49,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return products;
         }
@@ -49,14 +79,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
-                _logger?.LogCritical(ex, "SQL Hatası");
+                _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
-                _logger?.LogCritical(ex, "Genel Hata");
+                _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
 
             return group;
@@ -73,14 +106,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return product;
         }
@@ -96,14 +132,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return product;
         }
@@ -125,14 +164,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return product;
         }
@@ -166,14 +208,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return newproduct;
         }

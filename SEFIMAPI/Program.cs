@@ -14,12 +14,13 @@ builder.WebHost.UseKestrel(options =>
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IDirectTransactionRepository, DirectTransactionRepository>();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

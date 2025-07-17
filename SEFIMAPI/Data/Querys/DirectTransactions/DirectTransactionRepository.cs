@@ -17,19 +17,22 @@
 
             try
             {
-                kasa = await _context.DirectTransaction.OrderBy(p => p.Date).Skip((pagenumber - 1) * pagesize).Take(pagesize).ToListAsync();
+                kasa = await _context.DirectTransaction.OrderByDescending(p => p.Date).Skip((pagenumber - 1) * pagesize).Take(pagesize).ToListAsync();
             }
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return kasa;
         }
@@ -47,14 +50,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return 0;
         }
@@ -72,14 +78,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return 0;
         }
@@ -90,19 +99,22 @@
 
             try
             {
-                kasa = await _context.DeletedDirectTransaction.OrderBy(p => p.Date).Skip((pagenumber - 1) * pagesize).Take(pagesize).ToListAsync();
+                kasa = await _context.DeletedDirectTransaction.OrderByDescending(p => p.Date).Skip((pagenumber - 1) * pagesize).Take(pagesize).ToListAsync();
             }
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return kasa;
         }
@@ -130,14 +142,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return new List<DirectTransaction>();
         }
@@ -190,7 +205,7 @@
         {
             try
             {
-                var kasa = await _context.DirectTransaction.Where(p => p.Id == id).ToListAsync();
+                var kasa = await _context.DeletedDirectTransaction.Where(p => p.Id == id).ToListAsync();
                 var deletedEntities = kasa.Select(k => new DirectTransaction
                 {
                     Date = DateTime.Now,
@@ -252,14 +267,17 @@
             catch (DbUpdateException ex)
             {
                 _logger?.LogCritical($"DbUpdate Hatası :{ex.InnerException?.Message}");
+                throw;
             }
             catch (SqlException ex)
             {
                 _logger?.LogCritical($"Sql Hatası : {ex.Message}");
+                throw;
             }
             catch (Exception ex)
             {
                 _logger?.LogCritical($"Genel Hata : {ex.Message}");
+                throw;
             }
             return success;
         }

@@ -8,5 +8,6 @@
         Task<List<Product>> GetGroupsByProductAsync(string group);
         Task<List<Product>> GetPageProductAsync(int pagesize, int pagenumber, string group);
         Task<List<Product>> AddProductAsync(Product product);
+        Task<int> GetProductPageNumber(int pagesize);
     }
 }

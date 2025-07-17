@@ -22,9 +22,19 @@
                 var products = await _directTransactionRepository.GetDirectTransactions(pagesize, pagenumber);
                 return Ok(products);
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -38,9 +48,19 @@
                 var products = await _directTransactionRepository.GetDeletedDirectTransactions(pagesize, pagenumber);
                 return Ok(products);
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -57,9 +77,19 @@
                 var result = await _directTransactionRepository.AddDirectTransaction(transaction);
                 return result != null ? Ok("İşlem Başarılı") : StatusCode(500, "Kayıt yapılamadı.");
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -73,9 +103,19 @@
                 var result = await _directTransactionRepository.DeleteDirectTransaction(id);
                 return result ? Ok("İşlem Başarılı") : BadRequest("Kayıt bulunamadı.");
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -89,9 +129,19 @@
                 var result = await _directTransactionRepository.DeleteDeletedDirectTransaction(id);
                 return result ? Ok("İşlem Başarılı") : BadRequest("Kayıt bulunamadı.");
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -105,9 +155,19 @@
                 int result = await _directTransactionRepository.GetDirectTransactionPageNumber(pagesize);
                 return Ok(result);
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -121,9 +181,19 @@
                 int result = await _directTransactionRepository.GetDeletedDirectTransactionPageNumber(pagesize);
                 return Ok(result);
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
@@ -137,9 +207,19 @@
                 await _directTransactionRepository.DeletedTransactionTableCreate();
                 return Ok("İşlem Tamamlandı");
             }
+            catch (DbUpdateException ex)
+            {
+                _logger?.LogCritical($"DBUPDATE Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
+            catch (SqlException ex)
+            {
+                _logger?.LogCritical($"SQL Hatası: {ex.Message}");
+                return StatusCode(500, "Sunucu hatası");
+            }
             catch (Exception ex)
             {
-                _logger?.LogCritical($"Hata: {ex.Message}");
+                _logger?.LogCritical($"Genel Hata: {ex.Message}");
                 return StatusCode(500, "Sunucu hatası");
             }
         }
